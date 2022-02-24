@@ -57,6 +57,7 @@ customElements.define('custom-button', class CustomButton extends HTMLElement {
                     height: ${this.height};
                     font-family: arial, verdana, sans-serif;    
                     color: ${this.color};
+                    user-select: none;
                 }
                 
                 .btn .btn-img {
