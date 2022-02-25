@@ -1,10 +1,11 @@
 customElements.define('custom-button', class CustomButton extends HTMLElement {
 
     text = "";    
-    color = "white";     
+    color = "white";
+    prefix = "false";
     primaryColor = "rgb(51, 153, 255, 1)";
     secondaryColor = "rgb(0, 102, 204, 1)";
-    width = "300px";
+    width = "200px";
     height = "50px";
 
     constructor() {
@@ -13,7 +14,7 @@ customElements.define('custom-button', class CustomButton extends HTMLElement {
     }
 
     static get observedAttributes () {
-        return ['text', 'primary', 'secondary', 'color', 'width', 'height'];
+        return ['text', 'primary', 'secondary', 'color', 'width', 'height', 'prefix'];
     }
 
     attributeChangedCallback (name, oldValue, newValue) {
@@ -34,6 +35,9 @@ customElements.define('custom-button', class CustomButton extends HTMLElement {
         }
         if (name === 'height') {
             this.height = newValue;
+        }
+        if (name === 'prefix') {
+            this.prefix = newValue;
         }
 
         console.log(`Attribute ${name} changed from ${oldValue} to ${newValue}`);
@@ -79,7 +83,7 @@ customElements.define('custom-button', class CustomButton extends HTMLElement {
                     background-color: ${this.primaryColor};
                     width: 100%;
                     font-size: 18px;
-                    border-radius: 0 5px 5px 0;
+                    border-radius: ${this.borderText()};
                 }
 
                 .btn:hover {
@@ -96,12 +100,31 @@ customElements.define('custom-button', class CustomButton extends HTMLElement {
         `;
     }
 
+    borderText() {
+        if (this.prefix == "true") {
+            return "0px 5px 5px 0px;";
+        } else {
+            return "5px";
+        }
+    }
+
+    prefixhtml() {
+        console.log(this.prefix);
+        if (this.prefix == "true") {
+            return /*html*/`
+            <div id="btnId" class="btn-img">
+                <slot></slot>
+            </div>            
+            `
+        } else {
+            return "";
+        }
+    }
+
     template() {
         return /*html*/`
             <div class="btn">
-                <div id="btnId" class="btn-img">
-                    <slot></slot>
-                </div>
+                ${this.prefixhtml()}
                 <div class="btn-text">${this.text}</div>
             </div>
         `
